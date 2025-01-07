@@ -27,7 +27,7 @@
     </div>
   </div>
   <a 
-    href="../index.php" 
+    href="../homepage.php" 
     class="text-white bg-primary-grey rounded-2xl p-2 px-6 flex justify-center mt-4">
     Retour
   </a>
