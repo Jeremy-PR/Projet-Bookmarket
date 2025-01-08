@@ -1,85 +1,110 @@
 <?php
+
+// Vérifie que la requête est bien de type POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../public/inscription_vendeur.php?error=invalidRequest');
     exit;
 }
 
+// Vérifie que tous les champs requis sont fournis
 if (
-    !isset($_POST['nom'], $_POST['prenom'], $_POST['adresse'], $_POST['ville'],
-           $_POST['entreprise'], $_POST['adresse_entreprise'], $_POST['email'], $_POST['phone'], $_POST['password'])
+    !isset($_POST['nom'], $_POST['prenom'], $_POST['adresse'], $_POST['ville'], 
+          $_POST['entreprise'], $_POST['adresse_entreprise'], 
+          $_POST['phone'], $_POST['email'], $_POST['password'])
 ) {
-    header('Location: ../public/inscription_vendeur.php?error=removedInput');
+    header('Location: ../public/inscription_vendeur.php?error=missingFields');
     exit;
 }
 
-if (
-    empty($_POST['nom']) || empty($_POST['prenom']) || empty($_POST['adresse']) ||
-    empty($_POST['ville']) || empty($_POST['entreprise']) || empty($_POST['adresse_entreprise']) ||
-    empty($_POST['email']) || empty($_POST['phone']) || empty($_POST['password'])
-) {
-    header('Location: ../public/inscription_vendeur.php?error=emptyInputs');
-    exit;
-}
-
-// Sanitize inputs
+// Récupère et nettoie les données du formulaire
 $nom = htmlspecialchars(trim($_POST['nom']));
 $prenom = htmlspecialchars(trim($_POST['prenom']));
 $adresse = htmlspecialchars(trim($_POST['adresse']));
 $ville = htmlspecialchars(trim($_POST['ville']));
 $entreprise = htmlspecialchars(trim($_POST['entreprise']));
 $adresse_entreprise = htmlspecialchars(trim($_POST['adresse_entreprise']));
+$telephone = htmlspecialchars(trim($_POST['phone']));
 $email = htmlspecialchars(trim($_POST['email']));
-$phone = htmlspecialchars(trim($_POST['phone']));
 $password = $_POST['password'];
 
-// Valider l'email
+// Valide les formats des champs
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    header('Location: ../public/inscription_vendeur.php?error=incorrectMail');
+    header('Location: ../public/inscription_vendeur.php?error=invalidEmail');
     exit;
 }
 
-// Connexion à la base de données
+if (!preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/', $telephone)) {
+    header('Location: ../public/inscription_vendeur.php?error=invalidPhone');
+    exit;
+}
+
+// Hash le mot de passe pour la sécurité
+$hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+// Inclut la connexion à la base de données
 require_once("../utils/connect-db.php");
 
 try {
-    // Vérifier si l'email existe déjà
-    $checkSql = "SELECT email FROM `users` WHERE `email` = :email";
-    $stmt = $pdo->prepare($checkSql);
+    // Vérifie si l'email existe déjà
+    $checkQuery = "SELECT id FROM users WHERE email = :email";
+    $stmt = $pdo->prepare($checkQuery);
     $stmt->execute([':email' => $email]);
-
-    if ($stmt->rowCount() > 0) {
-        header('Location: ../public/inscription_vendeur.php?error=takenEmail');
+    if ($stmt->fetch()) {
+        header('Location: ../public/inscription_vendeur.php?error=emailTaken');
         exit;
     }
 
-    // Insertion des données dans la table `users`
-    $sql = "INSERT INTO `users` (`email`, `password`, `nom`, `prenom`, `adresse`, `ville`, `entreprise`, `adresse_entreprise`, `telephone`, `role`) 
-            VALUES (:email, :password, :nom, :prenom, :adresse, :ville, :entreprise, :adresse_entreprise, :telephone, 'vendeur')";
-    
-    // Hasher le mot de passe
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    // Récupère l'ID du rôle "vendeur"
+    $roleQuery = "SELECT id FROM role WHERE role = 'vendeur'";
+    $stmt = $pdo->prepare($roleQuery);
+    $stmt->execute();
+    $role = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->prepare($sql);
+    if (!$role) {
+        header('Location: ../public/inscription_vendeur.php?error=roleNotFound');
+        exit;
+    }
+
+    $id_role = $role['id'];
+
+    // Insère le vendeur dans la table `users`
+    $insertQuery = "INSERT INTO users (id_role, nom, prenom, adresse, ville, email, password, nom_entreprise, adresse_entreprise, telephone) 
+                    VALUES (:id_role, :nom, :prenom, :adresse, :ville, :email, :password, :nom_entreprise, :adresse_entreprise, :telephone)";
+    $stmt = $pdo->prepare($insertQuery);
     $stmt->execute([
-        ':email' => $email,
-        ':password' => $hashedPassword,
+        ':id_role' => $id_role,
         ':nom' => $nom,
         ':prenom' => $prenom,
         ':adresse' => $adresse,
         ':ville' => $ville,
-        ':entreprise' => $entreprise,
+        ':email' => $email,
+        ':password' => $hashedPassword,
+        ':nom_entreprise' => $entreprise,
         ':adresse_entreprise' => $adresse_entreprise,
-        ':telephone' => $phone
+        ':telephone' => $telephone,
     ]);
 
-    // Rediriger vers la page d'accueil ou afficher un message de succès
-    header('Location: ../homepage.php');
+    // Gère la session de l'utilisateur (le vendeur)
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE prenom = :prenom');
+    $stmt->execute([':prenom' => $prenom]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user) {
+        $sql = "INSERT INTO users (prenom) VALUES (:prenom)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['prenom' => $prenom]);
+        $_SESSION['user']['id'] = $pdo->lastInsertId();
+        $_SESSION['user']['prenom'] = $prenom;
+    } else {
+        $_SESSION['user'] = $user;
+    }
+
+    // Redirige vers la page d'accueil avec un message de succès
+    header('Location: ../public/copie_homepage.php?success=1');
     exit;
 
-} catch (PDOException $error) {
-    // Gestion des erreurs SQL
-    error_log("Erreur SQL : " . $error->getMessage());
-    header('Location: ../public/inscription_vendeur.php?error=sqlError');
+} catch (PDOException $e) {
+    echo "Erreur lors de l'insertion : " . $e->getMessage();
     exit;
 }
 ?>

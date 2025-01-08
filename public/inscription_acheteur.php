@@ -11,10 +11,10 @@
   <div class="bg-primary-grey p-8 rounded-2xl shadow-md w-96">
     <h1 class="text-2xl font-bold mb-6 text-neutral-white text-center">Inscription - Acheteur</h1>
     <form action="../process/process_inscription_acheteur.php" method="POST" class="space-y-4">
-      <input type="text" name="nom" placeholder="Nom" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red">
-      <input type="text" name="prenom" placeholder="Prénom" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red">
-      <input type="text" name="adresse" placeholder="Adresse" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red">
-      <input type="text" name="ville" placeholder="Ville" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red">
+      <input type="text" name="nom" placeholder="Nom" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
+      <input type="text" name="prenom" placeholder="Prénom" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
+      <input type="text" name="adresse" placeholder="Adresse" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
+      <input type="text" name="ville" placeholder="Ville" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
       <input 
         type="tel" 
         name="phone" 
@@ -23,8 +23,8 @@
         required 
         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red"
       >
-      <input type="email" name="email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red">
-      <input type="password" name="password" placeholder="Mot de passe" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red">
+      <input type="email" name="email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
+      <input type="password" name="password" placeholder="Mot de passe" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
       <input type="submit" value="S'inscrire" class="w-full bg-primary-red text-white py-2 rounded-lg hover:bg-primary-red transition duration-200 cursor-pointer">
     </form>
     <a href="../homepage.php" class="block text-center mt-4 text-neutral-white hover:underline">Retour</a>
