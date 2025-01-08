@@ -50,11 +50,9 @@ if (isset($_SESSION['user'])) {
                                 <a href="../public/panier.php" class="hover:text-gray-300 "><i class='bx bx-cart'></i></a>
                             </li>
                             <li class="relative group">
-                                <a href="../public/connexion.php" class="hover:text-gray-300"><i class='bx bx-user-circle'></i></a>
+                                <a href="../public/compte_acheteur.php" class="hover:text-gray-300"><i class='bx bxs-user-account'></i></a>
                             </li>
-                            <li class="relative group">
-                                <a href="../public/inscription.php" class="hover:text-gray-300"><i class='bx bxs-registered'></i></a>
-                            </li>
+                           
                         </ul>
                     </div>
                 </div>
@@ -128,6 +126,7 @@ if (isset($_SESSION['user'])) {
                 </div>
             </article>
         </section>
+        <a id=deconnexion href="../process/process-clean.php">Déconnexion</a>
     </main>
 
     <footer class="bg-primary-grey"></footer>

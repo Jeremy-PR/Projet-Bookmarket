@@ -1,7 +1,7 @@
 <?php
 // évite qu'on change la requete en GET
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /connexion.php');
+    header('Location: ../public/connexion.php');
     exit;
 }
 
@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 if (
     !isset($_POST['email'], $_POST['password'])
 ) {
-    header('Location: /connexion.php?error=1');
+    header('Location: ../public/connexion.php?error=1');
     exit;
 }
 
@@ -18,7 +18,7 @@ if (
     empty($_POST['email']) ||
     empty($_POST['password'])
 ) {
-    header('Location: /connexion.php?error=2');
+    header('Location: ../public/connexion.php?error=2');
     exit;
 }
 
@@ -42,13 +42,13 @@ try {
 
     // Regarde si l'utilisateur existe déjà, si non, retourne erreur 10
     if (!$user) {
-        header('Location: /connexion.php?error=10');
+        header('Location: ../public/connexion.php?error=10');
         exit;
     }
 
     // vérifie si le mot de passe est le même que le mot de passe hashé
     if (!password_verify($mdp, $user["password"])) {
-        header('Location: /connexion.php?error=9');
+        header('Location: ../public/connexion.php?error=9');
         exit;
     }
 
@@ -62,7 +62,7 @@ try {
     $_SESSION["user"]["role"] = $user["id_role"];
 
     // Redirection vers la page d'accueil après la connexion réussie
-    header('Location: ./homepage.php');  // Redirection vers la racine
+    header('Location: ../public/copie_homepage.php');  // Redirection vers la racine
     exit;
 } catch (PDOException $error) {
     echo "Erreur lors de la requête : " . $error->getMessage();
