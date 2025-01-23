@@ -1,43 +1,18 @@
 <?php
+require_once '../utils/autoloader.php';
+
 session_start(); // Démarre la session
 
-
-// Vérifie si l'utilisateur est connecté
-if (!isset($_SESSION['user'])) {
-    // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
-    header('Location: connexion.php'); // Redirige vers la page de connexion
-    exit;
-}
-
-// Récupère l'ID de l'utilisateur depuis la session
-$userId = $_SESSION['user']['id'];
-
-// Connexion à la base de données
-require_once '../utils/connect-db.php';
-
-// Prépare la requête pour récupérer les informations de l'utilisateur
-$sql = "SELECT * FROM users WHERE id = :id";
-
-try {
-    // Exécute la requête avec l'ID de l'utilisateur
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':id' => $userId
-    ]);
-
-    // Récupère les informations de l'utilisateur
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Si l'utilisateur est trouvé, stockez ses informations dans des variables
-    if ($user) {
-        $prenom = htmlspecialchars($user['prenom']);
-    } else {
-        // Si l'utilisateur n'est pas trouvé, redirige vers une page d'erreur ou autre action
-        echo "Utilisateur non trouvé.";
-        exit;
-    }
-} catch (PDOException $error) {
-    echo "Erreur lors de la requête : " . $error->getMessage();
+// Vérifie si l'utilisateur est connecté via la session
+if (isset($_SESSION['user'])) {
+    // Récupère le prénom de l'utilisateur depuis la session
+    /**
+     * @var User $user
+     */
+    $user = $_SESSION['user'];
+} else {
+    // Si l'utilisateur n'est pas connecté, redirige vers la page d'inscription
+    header("Location: ./public/inscription_acheteur.php");
     exit;
 }
 ?>
@@ -62,7 +37,7 @@ try {
                     <div class="flex space-x-6">
                         <ul class="flex space-x-6">
                             <li class="relative group">
-                                <img src="../assets/src/image/logo.png" alt="Logo">
+                                <img src="./assets/src/image/logo.png" alt="Logo">
                             </li>
                         </ul>
                     </div>
@@ -90,7 +65,7 @@ try {
     </header>
     <div class="bg-neutral-black p-8 rounded-2xl shadow-md w-96   ">
         <h1 class="text-2xl font-bold mb-6 text-neutral-white text-center">Inscription - Acheteur</h1>
-        <form action="../process/process_modif_acheteur.php" method="POST" class="space-y-4 ">
+        <form action="./process/process_modif_acheteur.php" method="POST" class="space-y-4 ">
             <input type="text" name="nom" value="<?= $_SESSION['user']['nom'] ?>" class=" text-neutral-black w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
             <input type="text" name="prenom" value="<?= $_SESSION['user']['prenom'] ?>" class=" text-neutral-black w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
             <input type="text" name="adresse" value="<?= $_SESSION['user']['adresse'] ?>" class="  text-neutral-black w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>

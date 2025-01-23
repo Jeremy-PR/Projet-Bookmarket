@@ -1,42 +1,18 @@
 <?php
+require_once '../utils/autoloader.php';
+
 session_start(); // Démarre la session
 
-// Vérifie si l'utilisateur est connecté
-if (!isset($_SESSION['user'])) {
-    // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
-    header('Location: connexion.php'); // Redirige vers la page de connexion
-    exit;
-}
-
-// Récupère l'ID de l'utilisateur depuis la session
-$userId = $_SESSION['user']['id'];
-
-// Connexion à la base de données
-require_once '../utils/connect-db.php';
-
-// Prépare la requête pour récupérer les informations de l'utilisateur
-$sql = "SELECT * FROM users WHERE id = :id";
-
-try {
-    // Exécute la requête avec l'ID de l'utilisateur
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':id' => $userId
-    ]);
-
-    // Récupère les informations de l'utilisateur
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Si l'utilisateur est trouvé, stockez ses informations dans des variables
-    if ($user) {
-        $prenom = htmlspecialchars($user['prenom']);
-    } else {
-        // Si l'utilisateur n'est pas trouvé, redirige vers une page d'erreur ou autre action
-        echo "Utilisateur non trouvé.";
-        exit;
-    }
-} catch (PDOException $error) {
-    echo "Erreur lors de la requête : " . $error->getMessage();
+// Vérifie si l'utilisateur est connecté via la session
+if (isset($_SESSION['user'])) {
+    // Récupère le prénom de l'utilisateur depuis la session
+    /**
+     * @var User $user
+     */
+    $user = $_SESSION['user'];
+} else {
+    // Si l'utilisateur n'est pas connecté, redirige vers la page d'inscription
+    header("Location: ../public/inscription_acheteur.php");
     exit;
 }
 ?>
@@ -60,7 +36,7 @@ try {
                 <div class="flex space-x-6">
                     <ul class="flex space-x-6">
                         <li class="relative group">
-                            <img src="../assets/src/image/logo.png" alt="Logo">
+                            <img src="./assets/src/image/logo.png" alt="Logo">
                         </li>
                     </ul>
                 </div>
@@ -88,7 +64,7 @@ try {
 </header>
 <main class="bg-neutral-black text-neutral-white min-h-screen py-8">
     <h1 class="text-4xl font-bold text-center text-primary-red py-8">
-        Bienvenue <?= htmlspecialchars($prenom) ?>
+        Bienvenue <?= htmlspecialchars(($user->getPrenom())) ?>
     </h1>
     <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline">
         Gérer mon compte
@@ -111,17 +87,17 @@ try {
                 </thead>
                 <tbody>
                     <tr class="bg-gray-700 border-b border-gray-600 hover:bg-gray-600">
-                        <td class="px-4 py-2"><?= htmlspecialchars($user['prenom']) ?></td>
-                        <td class="px-4 py-2"><?= htmlspecialchars($user['nom']) ?></td>
-                        <td class="px-4 py-2"><?= htmlspecialchars($user['adresse']) ?></td>
-                        <td class="px-4 py-2"><?= htmlspecialchars($user['ville']) ?></td>
-                        <td class="px-4 py-2"><?= htmlspecialchars($user['telephone']) ?></td>
-                        <td class="px-4 py-2"><?= htmlspecialchars($user['email']) ?></td>
+                        <td class="px-4 py-2"><?= htmlspecialchars(($user->getPrenom())) ?></td>
+                        <td class="px-4 py-2"><?= htmlspecialchars(($user->getNom())) ?></td>
+                        <td class="px-4 py-2"><?= htmlspecialchars(($user->getAdresse())) ?></td>
+                        <td class="px-4 py-2"><?= htmlspecialchars(($user->getVille())) ?></td>
+                        <td class="px-4 py-2"><?= htmlspecialchars(($user->getTelephone())) ?></td>
+                        <td class="px-4 py-2"><?= htmlspecialchars(($user->getEmail())) ?></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <a href="./modif_acheteur.php?user=<?= $user['id'] ?>" 
+        <a href="./modif_acheteur.php?user=<?=(($user->getId())) ?>" 
            class="px-6 py-2 bg-primary-red text-white font-semibold rounded-md shadow-md hover:bg-red-600 transition">
            Modifier
         </a>

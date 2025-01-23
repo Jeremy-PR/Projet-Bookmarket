@@ -51,4 +51,28 @@ final class UserRepository extends AbstractRepository
             exit;
         }
     }
+
+
+    public function connectUser(string $email, string $password): ?user
+    {
+        try {
+            $sql = "SELECT * FROM users WHERE email = :email";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && password_verify($password, $user['password'])) {
+                return $user; // Renvoie les informations de l'utilisateur si valide
+            }
+            return null; // Retourne null si l'authentification échoue
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'authentification : " . $e->getMessage());
+        }
+    }
+
+
+
+
+    
 }

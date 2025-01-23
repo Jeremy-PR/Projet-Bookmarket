@@ -1,66 +1,53 @@
 <?php
+require_once("../utils/autoloader.php");
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../public/connexion.php?error=invalidRequest');
     exit;
 }
 
-
 if (!isset($_POST['email'], $_POST['password'])) {
     header('Location: ../public/connexion.php?error=missingFields');
     exit;
 }
-
 
 if (empty($_POST['email']) || empty($_POST['password'])) {
     header('Location: ../public/connexion.php?error=emptyFields');
     exit;
 }
 
-
 $email = htmlspecialchars(trim($_POST['email']));
 $mdp = $_POST['password']; 
 
 
-require_once("../utils/connect-db.php");
 
 try {
+    // Crée une instance de UserRepository pour accéder à la méthode connectUser
+    $userRepository = new UserRepository($pdo);
 
-    $sql = "SELECT * FROM users WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
+    // Appel de la méthode connectUser pour obtenir un objet User
+    $user = $userRepository->connectUser($email, $mdp);
 
- 
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user) {
-   
-        header('Location: ../public/connexion.php?error=invalidEmail');
+    // Si l'utilisateur est null, cela signifie que la connexion a échoué
+    if ($user === null) {
+        header('Location: ../public/connexion.php?error=invalidCredentials');
         exit;
     }
 
-  
-    if (!password_verify($mdp, $user["password"])) {
  
-        header('Location: ../public/connexion.php?error=invalidPassword');
-        exit;
-    }
 
-    session_start();
+    // Stocke l'objet User dans la session
+    $_SESSION['user'] = $user;
 
-    $_SESSION["user"]["id"] = $user["id"];
-    $_SESSION["user"]["email"] = $user["email"];
-    $_SESSION["user"]["nom"] = $user["nom"];
-    $_SESSION["user"]["prenom"] = $user["prenom"];
-    $_SESSION["user"]["role"] = $user["id_role"];
-
-    header('Location: ../public/copie_homepage.php');  
+    // Redirection vers la page d'accueil après la connexion réussie
+    header('Location: ../public/copie_homepage.php');
     exit;
 
 } catch (PDOException $error) {
-
     echo "Erreur lors de la requête : " . $error->getMessage();
     exit;
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+    exit;
 }
-?>
