@@ -1,10 +1,15 @@
 <?php
+require_once '../utils/autoloader.php';
+
 session_start(); // Démarre la session
 
 // Vérifie si l'utilisateur est connecté via la session
 if (isset($_SESSION['user'])) {
     // Récupère le prénom de l'utilisateur depuis la session
-    $prenom = $_SESSION['user']['prenom'];
+    /**
+     * @var User $user
+     */
+    $user = $_SESSION['user'];
 } else {
     // Si l'utilisateur n'est pas connecté, redirige vers la page d'inscription
     header("Location: ../public/inscription_acheteur.php");
@@ -19,7 +24,7 @@ if (isset($_SESSION['user'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="../assets/css/output.css">
+    <link rel="stylesheet" href="./assets/css/output.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
@@ -32,7 +37,7 @@ if (isset($_SESSION['user'])) {
                     <div class="flex space-x-6">
                         <ul class="flex space-x-6">
                             <li class="relative group">
-                                <img src="../assets/src/image/logo.png" alt="Logo">
+                                <img src="./assets/src/image/logo.png" alt="Logo">
                             </li>
                         </ul>
                     </div>
@@ -52,7 +57,7 @@ if (isset($_SESSION['user'])) {
                             <li class="relative group">
                                 <a href="../public/compte_acheteur.php" class="hover:text-gray-300"><i class='bx bxs-user-account'></i></a>
                             </li>
-                           
+
                         </ul>
                     </div>
                 </div>
@@ -61,9 +66,9 @@ if (isset($_SESSION['user'])) {
     </header>
 
     <main class="bg-neutral-black">
-    <h1 class="text-4xl font-bold text-center text-primary-red py-8">
-    Bienvenue <?= htmlspecialchars($prenom) ?>
-</h1>
+        <h1 class="text-4xl font-bold text-center text-primary-red py-8">
+            Bienvenue <?= htmlspecialchars($user->getPrenom()) ?>
+        </h1>
 
         <div class="flex justify-between text-neutral-white mx-auto px-8">
             <p>Amour</p>

@@ -1,4 +1,6 @@
 <?php
+require_once("../utils/autoloader.php");
+
 session_start(); // Démarre la session
 
 // Vérifie que la requête est bien de type POST
@@ -9,8 +11,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Vérifie que tous les champs requis sont fournis
 if (
-    !isset($_POST['nom'], $_POST['prenom'], $_POST['adresse'], $_POST['ville'], 
-          $_POST['phone'], $_POST['email'], $_POST['password'])
+    !isset(
+        $_POST['nom'],
+        $_POST['prenom'],
+        $_POST['adresse'],
+        $_POST['ville'],
+        $_POST['phone'],
+        $_POST['email'],
+        $_POST['password']
+    )
 ) {
     header('Location: ../public/inscription_acheteur.php?error=missingFields');
     exit;
@@ -36,70 +45,37 @@ if (!preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/', $telephone))
     exit;
 }
 
-// Hash le mot de passe pour la sécurité
+
 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-// Inclut la connexion à la base de données
-require_once("../utils/connect-db.php");
 
-try {
-    // Vérifie si l'email existe déjà
-    $checkQuery = "SELECT id FROM users WHERE email = :email";
-    $stmt = $pdo->prepare($checkQuery);
-    $stmt->execute([':email' => $email]);
-    if ($stmt->fetch()) {
-        header('Location: ../public/inscription_acheteur.php?error=emailTaken');
-        exit;
-    }
 
-    // Récupère l'ID du rôle "acheteur"
-    $roleQuery = "SELECT id FROM role WHERE role = 'acheteur'";
-    $stmt = $pdo->prepare($roleQuery);
-    $stmt->execute();
-    $role = $stmt->fetch(PDO::FETCH_ASSOC);
+$userRepo = new UserRepository();
 
-    if (!$role) {
-        header('Location: ../public/inscription_acheteur.php?error=roleNotFound');
-        exit;
-    }
-
-    $id_role = $role['id'];
-
-    // Insère l'acheteur dans la table `users`
-    $insertQuery = "INSERT INTO users (id_role, nom, prenom, adresse, ville, email, password, telephone) 
-                    VALUES (:id_role, :nom, :prenom, :adresse, :ville, :email, :password, :telephone)";
-    $stmt = $pdo->prepare($insertQuery);
-    $stmt->execute([
-        ':id_role' => $id_role,
-        ':nom' => $nom,
-        ':prenom' => $prenom,
-        ':adresse' => $adresse,
-        ':ville' => $ville,
-        ':email' => $email,
-        ':password' => $hashedPassword,
-        ':telephone' => $telephone,
-    ]);
-
-    // Récupère l'utilisateur nouvellement ajouté à partir de l'email
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-    $stmt->execute([':email' => $email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user) {
-        // Si l'utilisateur n'a pas été trouvé (ce qui ne devrait pas arriver), redirige
-        header('Location: ../public/inscription_acheteur.php?error=userNotFound');
-        exit;
-    }
-
-    // Gère la session de l'utilisateur
-    $_SESSION['user'] = $user;
-
-    // Redirige vers la page d'accueil avec un message de succès
-    header('Location: ../public/copie_homepage.php?success=1');
-    exit;
-
-} catch (PDOException $e) {
-    echo "Erreur lors de l'insertion : " . $e->getMessage();
+if ($userRepo->verifMailExiste($email)) {
+    header('Location: ../public/inscription_acheteur.php?error=emailTaken');
     exit;
 }
-?>
+
+
+$roleRepo = new RoleRepository();
+
+$roleAcheteur = $roleRepo->findByName("acheteur");
+
+if ($roleAcheteur === null) {
+    header('Location: ../public/inscription_acheteur.php?error=roleNotFound');
+    exit;
+}
+
+$user = new User($roleAcheteur, $nom, $prenom, $adresse, $ville, $email, $hashedPassword, $telephone);
+
+$idUserInserer = $userRepo->createUser($user);
+
+$user->setId($idUserInserer);
+
+
+$_SESSION['user'] = $user;
+
+
+header('Location: ../public/copie_homepage.php?success=1');
+exit;

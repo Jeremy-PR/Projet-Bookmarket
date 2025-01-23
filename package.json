@@ -4,7 +4,7 @@
 
 
   "scripts": {
-    "build:css": "tailwindcss build -i ./assets/css/style.css -o ./assets/css/output.css --watch"
+    "build:css": "tailwindcss build -i ./public/assets/css/style.css -o ./public/assets/css/output.css --watch"
   },
   "keywords": [],
   "author": "",

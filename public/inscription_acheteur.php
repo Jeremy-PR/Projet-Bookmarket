@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscription - Acheteur</title>
-  <link rel="stylesheet" href="../assets/css/output.css">
-  <script src="../assets/JS/choix.js"></script>
+  <link rel="stylesheet" href="./assets/css/output.css">
+  <script src="./assets/JS/choix.js"></script>
 </head>
 <body class="bg-neutral-black flex items-center justify-center h-screen">
   <div class="bg-primary-grey p-8 rounded-2xl shadow-md w-96">

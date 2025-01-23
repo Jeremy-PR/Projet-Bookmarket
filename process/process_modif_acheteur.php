@@ -3,11 +3,11 @@ session_start();
 
 
 if (!isset($_SESSION['user'])) {
-    header('Location: ../inscription_acheteur.php'); // Redirige vers la page de connexion si non connecté
+    header('Location: ../inscription_acheteur.php'); 
     exit;
 }
 
-// Récupérer l'ID utilisateur depuis la session
+
 $id = $_SESSION['user']['id'];
 
 // Vérification des champs requis
@@ -21,7 +21,7 @@ if (
     exit;
 }
 
-// Nettoyage des données utilisateur
+
 $nom = htmlspecialchars(trim($_POST['nom']));
 $prenom = htmlspecialchars(trim($_POST['prenom']));
 $adresse = htmlspecialchars(trim($_POST['adresse']));
@@ -29,10 +29,9 @@ $ville = htmlspecialchars(trim($_POST['ville']));
 $telephone = htmlspecialchars(trim($_POST['telephone']));
 $email = htmlspecialchars(trim($_POST['email']));
 
-// Connexion à la base de données
 require_once '../utils/connect-db.php';
 
-// Mise à jour des informations utilisateur
+
 $sql = "UPDATE users 
         SET nom = :nom, prenom = :prenom, adresse = :adresse, ville = :ville, telephone = :telephone, email = :email 
         WHERE id = :id";
@@ -40,7 +39,7 @@ $sql = "UPDATE users
 try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ':id' => $id, // ID récupéré depuis la session
+        ':id' => $id, 
         ':nom' => $nom,
         ':prenom' => $prenom,
         ':adresse' => $adresse,
