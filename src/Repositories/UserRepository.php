@@ -45,7 +45,7 @@ final class UserRepository extends AbstractRepository
                 ':telephone' => $user->getTelephone(),
             ]);
 
-           return $this->pdo->lastInsertId();
+            return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             echo "Erreur lors de l'insertion : " . $e->getMessage();
             exit;
@@ -77,11 +77,11 @@ final class UserRepository extends AbstractRepository
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
             if ($user && password_verify($password, $user['password'])) {
                 // Crée un objet Role à partir des données récupérées
                 $role = new Role($user['role_id'], $user['role_name']);
-    
+
                 // Crée et retourne un objet User
                 return new User(
                     $role,
@@ -97,13 +97,10 @@ final class UserRepository extends AbstractRepository
                     $user['adresse_entreprise'] ?? null
                 );
             }
-    
+
             return null; // Retourne null si l'authentification échoue
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de l'authentification : " . $e->getMessage());
         }
     }
-    
-
-    
 }

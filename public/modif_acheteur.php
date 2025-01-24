@@ -1,9 +1,9 @@
 <?php
 require_once '../utils/autoloader.php';
 
-session_start(); // Démarre la session
+session_start(); 
 
-// Vérifie si l'utilisateur est connecté via la session
+
 if (isset($_SESSION['user'])) {
     // Récupère le prénom de l'utilisateur depuis la session
     /**
@@ -11,7 +11,7 @@ if (isset($_SESSION['user'])) {
      */
     $user = $_SESSION['user'];
 } else {
-    // Si l'utilisateur n'est pas connecté, redirige vers la page d'inscription
+ 
     header("Location: ./public/inscription_acheteur.php");
     exit;
 }

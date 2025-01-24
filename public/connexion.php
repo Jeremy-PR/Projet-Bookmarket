@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
     <link rel="stylesheet" href="./assets/css/output.css">
 
-    </head>
+</head>
+
 <body class="bg-neutral-black flex items-center justify-center h-screen">
     <div class="bg-primary-grey p-8 rounded-2xl shadow-md w-96">
         <h2 class="text-2xl font-bold mb-6 text-neutral-white">Connexion</h2>
@@ -25,4 +27,5 @@
         <a href="../homepage.php" class="block text-center mt-4 text-neutral-white hover:underline">Retour à l'accueil</a>
     </div>
 </body>
+
 </html>

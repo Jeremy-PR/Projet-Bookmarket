@@ -18,7 +18,7 @@ if (empty($_POST['email']) || empty($_POST['password'])) {
 }
 
 $email = htmlspecialchars(trim($_POST['email']));
-$mdp = $_POST['password']; 
+$mdp = $_POST['password'];
 
 
 
@@ -26,7 +26,7 @@ try {
 
     $userRepository = new UserRepository($pdo);
 
-  
+
     $user = $userRepository->connectUser($email, $mdp);
 
 
@@ -35,15 +35,14 @@ try {
         exit;
     }
 
- 
 
- 
+
+
     $_SESSION['user'] = $user;
 
 
     header('Location: ../public/copie_homepage.php');
     exit;
-
 } catch (PDOException $error) {
     echo "Erreur lors de la requête : " . $error->getMessage();
     exit;
