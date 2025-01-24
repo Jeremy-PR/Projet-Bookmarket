@@ -1,15 +1,15 @@
 <?php
 require_once("../utils/autoloader.php");
 
-session_start(); // Démarre la session
+session_start(); 
 
-// Vérifie que la requête est bien de type POST
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../public/inscription_acheteur.php?error=invalidRequest');
     exit;
 }
 
-// Vérifie que tous les champs requis sont fournis
+
 if (
     !isset(
         $_POST['nom'],
@@ -25,7 +25,7 @@ if (
     exit;
 }
 
-// Récupère et nettoie les données du formulaire
+
 $nom = htmlspecialchars(trim($_POST['nom']));
 $prenom = htmlspecialchars(trim($_POST['prenom']));
 $adresse = htmlspecialchars(trim($_POST['adresse']));
@@ -34,7 +34,7 @@ $telephone = htmlspecialchars(trim($_POST['phone']));
 $email = htmlspecialchars(trim($_POST['email']));
 $password = $_POST['password'];
 
-// Valide les formats des champs
+
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     header('Location: ../public/inscription_acheteur.php?error=invalidEmail');
     exit;

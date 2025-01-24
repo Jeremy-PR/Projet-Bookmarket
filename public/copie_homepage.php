@@ -11,7 +11,7 @@ if (isset($_SESSION['user'])) {
      */
     $user = $_SESSION['user'];
 } else {
-    // Si l'utilisateur n'est pas connecté, redirige vers la page d'inscription
+
     header("Location: ../public/inscription_acheteur.php");
     exit;
 }
@@ -82,7 +82,7 @@ if (isset($_SESSION['user'])) {
     <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline">
         Top 3 à la vente
     </h2>
-
+<a href="./form-addbook.php">Ajouter un livre</a>
     <section class="mx-auto px-4">
         <article class="mb-6">
             <div class="bg-primary-blue_bayoux flex flex-col sm:flex-row justify-between p-4 rounded-lg">
