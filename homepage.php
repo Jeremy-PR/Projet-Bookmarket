@@ -1,5 +1,8 @@
 <?php
 require_once("./utils/connect-db.php");
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +56,7 @@ require_once("./utils/connect-db.php");
     </header>
 
     <main class="bg-neutral-black">
-        <div class="flex justify-between text-neutral-white mx-auto px-8">
+        <div class="flex justify-between text-neutral-white mx-auto px-8 text-xl pt-2">
             <p>Roman</p>
             <p>Thriller</p>
             <p>Histoire</p>
@@ -61,60 +64,69 @@ require_once("./utils/connect-db.php");
             <p>Enfants</p>
         </div>
 
-        <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline">
+        <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline font-bold">
             Top 3 à la vente
         </h2>
 
         <section class="mx-auto px-4">
-            <article class="mb-6">
-                <div class="bg-primary-blue_bayoux flex flex-col sm:flex-row justify-between p-4 rounded-lg">
-                    <img src="./public/assets/src/image/couv_1984.png" alt="photo de couverture de 1984" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
-                    <div class="sm:ml-4">
-                        <h3 class="text-neutral-white pb-2 text-lg">1984 : Proposé par "La Lecture"</h3>
-                        <p class="text-neutral-white text-sm">
-                            1984 d'Orwell raconte l'histoire de Winston Smith, un homme vivant sous un régime totalitaire où la liberté de pensée est réprimée par un gouvernement omniprésent dirigé par Big Brother.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center pt-2">
-                    <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
-                    <p class="text-primary-red text-lg">14,99€</p>
-                </div>
-            </article>
+    <div class="flex flex-col sm:flex-row sm:space-x-6 sm:space-y-0 space-y-6">
+        <!-- Article 1 -->
+        <article class="flex flex-col bg-primary-blue_bayoux p-4 rounded-lg">
+            <img src="./public/assets/src/image/couv_1984.png" alt="photo de couverture de 1984" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
+            <div class="sm:ml-4">
+                <h3 class="text-neutral-white pb-2 text-lg">1984 : Proposé par "La Lecture"</h3>
+                <p class="text-neutral-white text-sm">
+                    1984 d'Orwell raconte l'histoire de Winston Smith, un homme vivant sous un régime totalitaire où la liberté de pensée est réprimée par un gouvernement omniprésent dirigé par Big Brother.
+                </p>
+            </div>
+            <div class="flex flex-col items-center pt-2">
+                <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
+                <p class="text-primary-red text-lg">14,99€</p>
+            </div>
+        </article>
 
-            <article class="mb-6">
-                <div class="bg-primary-violet flex flex-col sm:flex-row justify-between p-4 rounded-lg">
-                    <img src="./public/assets/src/image/couv_martineden.png" alt="photo de couverture de Martin Eden" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
-                    <div class="sm:ml-4">
-                        <h3 class="text-neutral-white pb-2 text-lg">Martin Eden : Proposé par "Ernesto G"</h3>
-                        <p class="text-neutral-white text-sm">
-                            Martin Eden de Jack London suit l'ascension d'un jeune marin autodidacte qui cherche à devenir écrivain et à s'intégrer dans la société bourgeoise, tout en luttant avec ses idéaux et les désillusions qu'il rencontre.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center pt-2">
-                    <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
-                    <p class="text-primary-red text-lg">16,99€</p>
-                </div>
-            </article>
+        <!-- Article 2 -->
+        <article class="flex flex-col bg-primary-violet p-4 rounded-lg">
+            <img src="./public/assets/src/image/couv_martineden.png" alt="photo de couverture de Martin Eden" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
+            <div class="sm:ml-4">
+                <h3 class="text-neutral-white pb-2 text-lg">Martin Eden : Proposé par "Ernesto G"</h3>
+                <p class="text-neutral-white text-sm">
+                    Martin Eden de Jack London suit l'ascension d'un jeune marin autodidacte qui cherche à devenir écrivain et à s'intégrer dans la société bourgeoise, tout en luttant avec ses idéaux et les désillusions qu'il rencontre.
+                </p>
+            </div>
+            <div class="flex flex-col items-center pt-2">
+                <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
+                <p class="text-primary-red text-lg">16,99€</p>
+            </div>
+        </article>
 
-            <article class="mb-6">
-                <div class="bg-primary-eggplant flex flex-col sm:flex-row justify-between p-4 rounded-lg">
-                    <img src="./public/assets/src/image/couv_laferme.png" alt="photo de couverture dela ferme des animaux" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
-                    <div class="sm:ml-4">
-                        <h3 class="text-neutral-white pb-2 text-lg">La ferme des animaux : Proposé par "Maria D"</h3>
-                        <p class="text-neutral-white text-sm">
-                        La Ferme des animaux de George Orwell raconte l'histoire d'animaux révoltés contre leurs maîtres humains pour instaurer une société égalitaire, mais ils finissent par être opprimés sous un nouveau régime aussi tyrannique que l'ancien.                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center pt-2">
-                    <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
-                    <p class="text-primary-red text-lg">17,99€</p>
-                </div>
-            </article>
-        </section>
+        <!-- Article 3 -->
+        <article class="flex flex-col bg-primary-eggplant p-4 rounded-lg">
+            <img src="./public/assets/src/image/couv_laferme.png" alt="photo de couverture de la ferme des animaux" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
+            <div class="sm:ml-4">
+                <h3 class="text-neutral-white pb-2 text-lg">La ferme des animaux : Proposé par "Maria D"</h3>
+                <p class="text-neutral-white text-sm">
+                    La Ferme des animaux de George Orwell raconte l'histoire d'animaux révoltés contre leurs maîtres humains pour instaurer une société égalitaire, mais ils finissent par être opprimés sous un nouveau régime aussi tyrannique que l'ancien.
+                </p>
+            </div>
+            <div class="flex flex-col items-center pt-2">
+                <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
+                <p class="text-primary-red text-lg">17,99€</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline font-bold">
+Pour en savoir plus
+</h2>
+<div  class="flex flex-col items-center pt-2 text-2xl">
+<a href="./public/connexion.php" class="hover:text-gray-300"><i class='bx bx-user-circle' ></i> Connectez-vous </a>
+<a href="./public/inscription.php" class="hover:text-gray-300"><i class='bx bxs-registered' ></i>Inscrivez-vous</a>
+</div>
+
     </main>
-
+ 
     <footer class="bg-primary-grey"></footer>
 </body>
 

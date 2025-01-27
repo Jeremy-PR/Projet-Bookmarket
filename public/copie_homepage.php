@@ -14,8 +14,12 @@ if (isset($_SESSION['user'])) {
 
     header("Location: ../public/inscription_acheteur.php");
     exit;
-
 }
+
+$bookRepository = new BookRepository();
+$books = $bookRepository->getAllBooks(); // On récupère tous les livre
+
+
 
 ?>
 
@@ -67,34 +71,35 @@ if (isset($_SESSION['user'])) {
         </nav>
     </header>
 
+
+
     <main class="bg-neutral-black">
-        <h1 class="text-4xl font-bold text-center text-primary-red py-8">
+    <h1 class="text-4xl font-bold text-center text-primary-red py-8">
             Bienvenue <?= htmlspecialchars($user->getPrenom()) ?>
         </h1>
-    </main>
+        <div class="flex justify-between text-neutral-white mx-auto px-8 text-xl pt-2">
+            <p>Roman</p>
+            <p>Thriller</p>
+            <p>Histoire</p>
+            <p>Fantastique</p>
+            <p>Enfants</p>
+        </div>
 
-    <div class="flex justify-between text-neutral-white mx-auto px-8">
-        <p>Roman</p>
-        <p>Thriller</p>
-        <p>Histoire</p>
-        <p>Fantastique</p>
-        <p>Enfants</p>
-    </div>
 
-    <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline">
-        Top 3 à la vente
-    </h2>
-    <a href="../public/form-addbook.php">Ajouter un livre</a>
-    <section class="mx-auto px-4">
-        <article class="mb-6">
-            <div class="bg-primary-blue_bayoux flex flex-col sm:flex-row justify-between p-4 rounded-lg">
-                <img src="./assets/src/image/couv_1984.png" alt="photo de couverture de 1984" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
-                <div class="sm:ml-4">
-                    <h3 class="text-neutral-white pb-2 text-lg">1984 : Proposé par "La Lecture"</h3>
-                    <p class="text-neutral-white text-sm">
-                        1984 d'Orwell raconte l'histoire de Winston Smith, un homme vivant sous un régime totalitaire où la liberté de pensée est réprimée par un gouvernement omniprésent dirigé par Big Brother.
-                    </p>
-                </div>
+        <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline font-bold">
+            Top 3 à la vente
+        </h2>
+
+        <section class="mx-auto px-4">
+    <div class="flex flex-col sm:flex-row sm:space-x-6 sm:space-y-0 space-y-6">
+        <!-- Article 1 -->
+        <article class="flex flex-col bg-primary-blue_bayoux p-4 rounded-lg">
+        <img src="./assets/src/image/couv_1984.png" alt="photo de couverture de 1984" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
+            <div class="sm:ml-4">
+                <h3 class="text-neutral-white pb-2 text-lg">1984 : Proposé par "La Lecture"</h3>
+                <p class="text-neutral-white text-sm">
+                    1984 d'Orwell raconte l'histoire de Winston Smith, un homme vivant sous un régime totalitaire où la liberté de pensée est réprimée par un gouvernement omniprésent dirigé par Big Brother.
+                </p>
             </div>
             <div class="flex flex-col items-center pt-2">
                 <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
@@ -102,15 +107,14 @@ if (isset($_SESSION['user'])) {
             </div>
         </article>
 
-        <article class="mb-6">
-            <div class="bg-primary-violet flex flex-col sm:flex-row justify-between p-4 rounded-lg">
-                <img src="./assets/src/image/couv_martineden.png" alt="photo de couverture de Martin Eden" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
-                <div class="sm:ml-4">
-                    <h3 class="text-neutral-white pb-2 text-lg">Martin Eden : Proposé par "Ernesto G"</h3>
-                    <p class="text-neutral-white text-sm">
-                        Martin Eden de Jack London suit l'ascension d'un jeune marin autodidacte qui cherche à devenir écrivain et à s'intégrer dans la société bourgeoise, tout en luttant avec ses idéaux et les désillusions qu'il rencontre.
-                    </p>
-                </div>
+        <!-- Article 2 -->
+        <article class="flex flex-col bg-primary-violet p-4 rounded-lg">
+        <img src="./assets/src/image/couv_martineden.png" alt="photo de couverture de Martin Eden" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
+            <div class="sm:ml-4">
+                <h3 class="text-neutral-white pb-2 text-lg">Martin Eden : Proposé par "Ernesto G"</h3>
+                <p class="text-neutral-white text-sm">
+                    Martin Eden de Jack London suit l'ascension d'un jeune marin autodidacte qui cherche à devenir écrivain et à s'intégrer dans la société bourgeoise, tout en luttant avec ses idéaux et les désillusions qu'il rencontre.
+                </p>
             </div>
             <div class="flex flex-col items-center pt-2">
                 <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
@@ -118,25 +122,58 @@ if (isset($_SESSION['user'])) {
             </div>
         </article>
 
-        <article class="mb-6">
-            <div class="bg-primary-eggplant flex flex-col sm:flex-row justify-between p-4 rounded-lg">
-                <img src="./assets/src/image/couv_laferme.png" alt="photo de couverture de la ferme des animaux" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
-                <div class="sm:ml-4">
-                    <h3 class="text-neutral-white pb-2 text-lg">La ferme des animaux : Proposé par "Maria D"</h3>
-                    <p class="text-neutral-white text-sm">
-                        La Ferme des animaux de George Orwell raconte l'histoire d'animaux révoltés contre leurs maîtres humains pour instaurer une société égalitaire, mais ils finissent par être opprimés sous un nouveau régime aussi tyrannique que l'ancien.
-                    </p>
-                </div>
+        <!-- Article 3 -->
+        <article class="flex flex-col bg-primary-eggplant p-4 rounded-lg">
+        <img src="./assets/src/image/couv_laferme.png" alt="photo de couverture de la ferme des animaux" class="w-full sm:w-1/3 lg:w-1/4 mb-4 sm:mb-0">
+            <div class="sm:ml-4">
+                <h3 class="text-neutral-white pb-2 text-lg">La ferme des animaux : Proposé par "Maria D"</h3>
+                <p class="text-neutral-white text-sm">
+                    La Ferme des animaux de George Orwell raconte l'histoire d'animaux révoltés contre leurs maîtres humains pour instaurer une société égalitaire, mais ils finissent par être opprimés sous un nouveau régime aussi tyrannique que l'ancien.
+                </p>
             </div>
             <div class="flex flex-col items-center pt-2">
                 <a class="bg-green-600 text-neutral-white rounded-2xl py-2 px-4 mb-2" href="#">Ajouter au panier</a>
                 <p class="text-primary-red text-lg">17,99€</p>
             </div>
         </article>
-    </section>
-    <a id="deconnexion" href="../process/process-clean.php">Déconnexion</a>
-    </main>
+    </div>
+</section>
 
+<h2 class="text-neutral-white text-center pt-8 pb-8 text-3xl underline font-bold">Notre Sélection</h2>
+
+<section class="mx-auto px-4 mt-16 max-w-screen-xl">
+    <h2 class="text-3xl font-bold mb-8 text-neutral-white text-center">Sélection de Livres</h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <?php if (!empty($books)): ?>
+            <?php foreach ($books as $book): ?>
+                <div class="bg-neutral-dark rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <img src="<?= $book->getIdImage() ? "path/to/images/{$book->getIdImage()}.jpg" : "path/to/default-image.jpg" ?>" 
+                         alt="photo de la couverture du livre" class="w-full h-64 object-cover">
+
+                    <div class="p-4">
+                        <p class="text-xl font-semibold text-neutral-white"><?= htmlspecialchars($book->getTitre()) ?></p>
+                        <p class="text-lg text-neutral-light"><?= htmlspecialchars($book->getAuteur()) ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="text-neutral-white text-center col-span-full">Aucun livre disponible.</p>
+        <?php endif; ?>
+    </div>
+</section>
+
+<section class ="flex justify-center">
+<a id="deconnexion" href="../process/process-clean.php" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300">
+    Déconnexion
+</a>
+
+<a href="../public/form-addbook.php" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 ml-4">
+    Ajouter un livre
+</a>
+</section>
+    </main>
+    
     <footer class="bg-primary-grey"></footer>
 </body>
 

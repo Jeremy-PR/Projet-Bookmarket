@@ -3,8 +3,6 @@ require_once '../utils/autoloader.php';
 
 session_start();
 
-
-// Vérifier si un ID de livre est passé dans l'URL
 if (!isset($_GET['bookId']) || !is_numeric($_GET['bookId'])) {
     echo "Aucun ID de livre spécifié.";
     exit;
@@ -12,6 +10,8 @@ if (!isset($_GET['bookId']) || !is_numeric($_GET['bookId'])) {
 
 $bookId = intval($_GET['bookId']);
 $bookRepository = new BookRepository();
+$genreRepository = new GenreRepository(); 
+$etatRepository = new EtatRepository(); 
 
 // Charger le livre depuis la base de données
 $book = $bookRepository->getBookById($bookId);
@@ -20,15 +20,20 @@ if (!$book) {
     echo "Livre introuvable.";
     exit;
 }
-var_dump($book); // Inspecte l'objet Book complet
 
+// Récupérer le genre du livre
+$genre = $genreRepository->getGenreById($book->getIdGenre());
+$genreName = $genre ? $genre->getNom() : 'Inconnu';
+
+// Récupérer l'état du livre
+$etat = $etatRepository->getEtatById($book->getIdEtat());
+$etatName = $etat ? $etat->getIntitulé() : 'Inconnu'; 
+
+
+$prix = $book->getPrix();
+$imagePath = $book->getIdImage() ? "path/to/images/{$book->getIdImage()}.jpg" : null;
+$vendeur = $book->getIdVendeur();
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,12 +41,12 @@ var_dump($book); // Inspecte l'objet Book complet
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Détails du Livre</title>
     <link rel="stylesheet" href="./assets/css/output.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
-<body bg-neutral-black flex items-center justify-center min-h-screen>
+<body class="bg-neutral-black flex items-center justify-center min-h-screen">
     <header>
         <nav class="bg-primary-grey text-white p-4">
             <div class="container mx-auto">
@@ -70,13 +75,13 @@ var_dump($book); // Inspecte l'objet Book complet
                             <li class="relative group">
                                 <a href="../public/compte_acheteur.php" class="hover:text-gray-300"><i class='bx bxs-user-account'></i></a>
                             </li>
-
                         </ul>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="bg-primary-grey p-8 rounded-2xl shadow-lg w-full max-w-3xl">
         <h1 class="text-3xl font-bold mb-6 text-neutral-white text-center">Détails du Livre</h1>
 
@@ -96,37 +101,37 @@ var_dump($book); // Inspecte l'objet Book complet
             <!-- Description -->
             <div>
                 <h2 class="text-xl font-semibold">Description :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($book->getIdGenre()) ?></p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($book->getDescription()) ?></p>
             </div>
 
             <!-- Genre -->
             <div>
                 <h2 class="text-xl font-semibold">Genre :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner">{{ genre }}</p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($genreName) ?></p>
             </div>
 
             <!-- Prix -->
             <div>
                 <h2 class="text-xl font-semibold">Prix :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner">{{ prix }} €</p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($prix) ?> €</p>
             </div>
 
             <!-- Image -->
             <div>
                 <h2 class="text-xl font-semibold">Image :</h2>
                 <div class="bg-neutral-dark p-3 rounded-lg shadow-inner">
-                    {% if imagePath %}
-                    <img src="{{ imagePath }}" alt="Image du livre" class="rounded-lg max-w-full">
-                    {% else %}
-                    <p class="italic text-neutral-light">Aucune image fournie.</p>
-                    {% endif %}
+                    <?php if ($imagePath): ?>
+                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Image du livre" class="rounded-lg max-w-full">
+                    <?php else: ?>
+                        <p class="italic text-neutral-light">Aucune image fournie.</p>
+                    <?php endif; ?>
                 </div>
             </div>
 
             <!-- Vendeur -->
             <div>
                 <h2 class="text-xl font-semibold">Vendeur :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner">{{ vendeur }}</p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($vendeur) ?></p>
             </div>
         </div>
 
@@ -135,6 +140,7 @@ var_dump($book); // Inspecte l'objet Book complet
             <a href="./form-addbook.php" class="text-neutral-white underline hover:text-primary-red transition">
                 Retour au formulaire
             </a>
+            <a href="./copie_homepage.php" class="text-neutral-white underline hover:text-primary-red transition">Retour à l'accueil</a>
         </div>
     </div>
 </body>

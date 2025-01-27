@@ -52,7 +52,30 @@ final class BookRepository extends AbstractRepository
     }
 
 
+    public function getAllBooks()
+    {
+        $sql = "SELECT * FROM books"; 
+        $stmt = $this->pdo->query($sql);
+        $booksData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        $books = [];
+        foreach ($booksData as $data) {
+            $books[] = new Book(
+                $data['titre'],
+                $data['auteur'],
+                $data['description'],
+                $data['id_genre'],
+                $data['prix'],
+                $data['id_image'],
+                $data['id_vendeur'],
+                $data['id_etat'],
+                $data['id_annonce'],
+                $data['id']
+            );
+        }
+
+        return $books;
+    }
 
 }
 
