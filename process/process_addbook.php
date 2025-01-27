@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $bookRepository = new BookRepository();
         $bookId = $bookRepository->addBook($book);
+     
 
 
         header('Location: ../public/book-details.php?bookId=' . $bookId);

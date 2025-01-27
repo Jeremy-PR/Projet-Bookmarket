@@ -4,11 +4,23 @@ require_once '../utils/autoloader.php';
 session_start();
 
 
+// Vérifier si un ID de livre est passé dans l'URL
+if (!isset($_GET['bookId']) || !is_numeric($_GET['bookId'])) {
+    echo "Aucun ID de livre spécifié.";
+    exit;
+}
+
+$bookId = intval($_GET['bookId']);
 $bookRepository = new BookRepository();
 
+// Charger le livre depuis la base de données
+$book = $bookRepository->getBookById($bookId);
 
-
-
+if (!$book) {
+    echo "Livre introuvable.";
+    exit;
+}
+var_dump($book); // Inspecte l'objet Book complet
 
 ?>
 
@@ -72,19 +84,19 @@ $bookRepository = new BookRepository();
             <!-- Titre -->
             <div>
                 <h2 class="text-xl font-semibold">Titre :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= $_SESSION['book']['titre'] ?></p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($book->getTitre()) ?></p>
             </div>
 
             <!-- Auteur -->
             <div>
                 <h2 class="text-xl font-semibold">Auteur :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner">{{ auteur }}</p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($book->getAuteur()) ?></p>
             </div>
 
             <!-- Description -->
             <div>
                 <h2 class="text-xl font-semibold">Description :</h2>
-                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner">{{ description }}</p>
+                <p class="text-lg bg-neutral-dark p-3 rounded-lg shadow-inner"><?= htmlspecialchars($book->getIdGenre()) ?></p>
             </div>
 
             <!-- Genre -->

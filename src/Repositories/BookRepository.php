@@ -36,6 +36,24 @@ final class BookRepository extends AbstractRepository
             exit;
         }
     }
+
+    public function getBookById(int $id): ?Book
+    {
+        $sql = "SELECT * FROM books WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $bookData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$bookData) {
+            return null;
+        }
+
+        return BookMapper::mapToObject($bookData);
+    }
+
+
+
+
 }
 
 

@@ -14,7 +14,9 @@ if (isset($_SESSION['user'])) {
 
     header("Location: ../public/inscription_acheteur.php");
     exit;
+
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +74,7 @@ if (isset($_SESSION['user'])) {
     </main>
 
     <div class="flex justify-between text-neutral-white mx-auto px-8">
-        <p>Amour</p>
+        <p>Roman</p>
         <p>Thriller</p>
         <p>Histoire</p>
         <p>Fantastique</p>
@@ -82,7 +84,7 @@ if (isset($_SESSION['user'])) {
     <h2 class="text-primary-red text-center pt-8 pb-8 text-3xl underline">
         Top 3 à la vente
     </h2>
-    <a href="./form-addbook.php">Ajouter un livre</a>
+    <a href="../public/form-addbook.php">Ajouter un livre</a>
     <section class="mx-auto px-4">
         <article class="mb-6">
             <div class="bg-primary-blue_bayoux flex flex-col sm:flex-row justify-between p-4 rounded-lg">

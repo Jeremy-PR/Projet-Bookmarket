@@ -5,7 +5,7 @@ session_start();
 
 if (!isset($_SESSION['user'])) {
     
-    header('Location: connexion.php');
+    header('Location: form-addbook.php');
     exit;
 }
 
@@ -52,8 +52,17 @@ if ($user->getRole()->getRole() !== 'vendeur') {
       <select name="genre" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
         <option value="">Sélectionner un Genre</option>
         <option value="1">Roman</option>
-        <option value="2">Science-fiction</option>
-        <option value="3">Historique</option>
+        <option value="2">Thriller</option>
+        <option value="3">Histoire</option>
+        <option value="3">Fantastique</option>
+        <option value="3">Enfants</option>
+      </select>
+
+      <select name="etat" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-red" required>
+        <option value="">Sélectionner l'état du livre</option>
+        <option value="1">Neuf</option>
+        <option value="2">Bon état</option>
+        <option value="3">Etat Moyen</option>
       </select>
 
       <!-- Image -->

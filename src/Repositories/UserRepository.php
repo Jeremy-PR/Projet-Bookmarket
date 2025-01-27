@@ -103,4 +103,7 @@ final class UserRepository extends AbstractRepository
             throw new Exception("Erreur lors de l'authentification : " . $e->getMessage());
         }
     }
+
+
+  
 }

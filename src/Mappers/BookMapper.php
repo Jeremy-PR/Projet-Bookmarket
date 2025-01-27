@@ -5,18 +5,16 @@ class BookMapper implements MapperContract
     public static function mapToObject(array $datas): Book
     {
         return new Book(
-            $datas['id'],
-            $datas['titre'],
-            $datas['auteur'],
-            $datas['description'],
-            $datas['id_genre'],
-            $datas['prix'],
-            $datas['id_image'],
-            $datas['id_vendeur'],
-            $datas['id_etat'],
-            $datas['id_annonce'],
-            
-            
+            $datas['titre'] ?? '', 
+            $datas['auteur'] ?? '', 
+            $datas['description'] ?? '', 
+            $datas['id_genre'] ?? null, 
+            $datas['prix'] ?? null, 
+            $datas['id_image'] ?? null, 
+            $datas['id_vendeur'] ?? null, 
+            $datas['id_etat'] ?? null, 
+            $datas['id_annonce'] ?? null, 
+            $datas['id'] ?? null 
         );
     }
 }
