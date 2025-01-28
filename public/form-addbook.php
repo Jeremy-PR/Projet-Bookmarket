@@ -73,7 +73,7 @@ if ($user->getRole()->getRole() !== 'vendeur') {
 
     </form>
 
-    <a href="book-details.php" class="block text-center mt-4 text-neutral-white hover:underline">Retour à la page d'accueil</a>
+    <a href="./copie_homepage.php" class="block text-center mt-4 text-neutral-white hover:underline">Retour à la page d'accueil</a>
   </div>
 </body>
 </html>

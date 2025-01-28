@@ -12,6 +12,7 @@ $bookId = intval($_GET['bookId']);
 $bookRepository = new BookRepository();
 $genreRepository = new GenreRepository(); 
 $etatRepository = new EtatRepository(); 
+$imageRepository = new ImageRepository();
 
 // Charger le livre depuis la base de données
 $book = $bookRepository->getBookById($bookId);
@@ -31,7 +32,7 @@ $etatName = $etat ? $etat->getIntitulé() : 'Inconnu';
 
 
 $prix = $book->getPrix();
-$imagePath = $book->getIdImage() ? "path/to/images/{$book->getIdImage()}.jpg" : null;
+$imagePath = $imageRepository->getImageById($book->getIdImage());
 $vendeur = $book->getIdVendeur();
 ?>
 
@@ -121,7 +122,7 @@ $vendeur = $book->getIdVendeur();
                 <h2 class="text-xl font-semibold">Image :</h2>
                 <div class="bg-neutral-dark p-3 rounded-lg shadow-inner">
                     <?php if ($imagePath): ?>
-                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Image du livre" class="rounded-lg max-w-full">
+                        <img src="<?= htmlspecialchars($imagePath->getImagePath()) ?>" alt="Image du livre" class="rounded-lg max-w-full">
                     <?php else: ?>
                         <p class="italic text-neutral-light">Aucune image fournie.</p>
                     <?php endif; ?>

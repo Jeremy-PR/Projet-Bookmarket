@@ -13,21 +13,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idGenre = intval($_POST['genre']);
         $prix = intval($_POST['prix']);
 
+        $photo = $_FILES['image'];
 
         $idImage = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $imageTmpName = $_FILES['image']['tmp_name'];
-            $imageName = basename($_FILES['image']['name']);
-            $uploadDir = __DIR__ . '/../uploads/';
-            $uploadPath = $uploadDir . $imageName;
+        if (isset($_FILES['image']) && $photo['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = '../public/assets/src/image/';
+            $fileName = uniqid() . basename($photo['name']);
+            $uploadPath = $uploadDir . $fileName;
+        
 
 
-            if (move_uploaded_file($imageTmpName, $uploadPath)) {
+            if (move_uploaded_file($photo['tmp_name'], $uploadPath)) {
 
 
-                $idImage = hash('sha256', $imageName);
+                $idImage = './assets/src/image/' . $fileName;
             }
         }
+$Image = new Image(0, $idImage, '');
+
+$imageRepo = new ImageRepository();
+$photo = $imageRepo->create($Image);
 
 
         $book = new Book(
@@ -37,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             description: $description,
             idGenre: $idGenre,
             prix: $prix,
-            idImage: $idImage,
+            idImage:$photo->getId(),
             idVendeur: $_SESSION['user']->getId(),
             idEtat: 1,
             idAnnonce: null

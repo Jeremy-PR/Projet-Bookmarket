@@ -10,4 +10,12 @@ class ImageMapper implements MapperContract
             $datas['alt']
         );
     }
+    public static function mapToArray(Image $Image): array
+    {
+        return [
+            'image_path' => $Image->getImagePath(),
+            'alt' => $Image->getAlt(),
+           
+        ];
+    }
 }

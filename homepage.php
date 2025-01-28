@@ -56,7 +56,7 @@ require_once("./utils/connect-db.php");
     </header>
 
     <main class="bg-neutral-black">
-        <div class="flex justify-between text-neutral-white mx-auto px-8 text-xl pt-2">
+        <div class="flex justify-between space-x-1 text-neutral-white mx-auto px-8 text-xl pt-2">
             <p>Roman</p>
             <p>Thriller</p>
             <p>Histoire</p>

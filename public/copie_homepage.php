@@ -18,6 +18,7 @@ if (isset($_SESSION['user'])) {
 
 $bookRepository = new BookRepository();
 $books = $bookRepository->getAllBooks(); // On récupère tous les livre
+$imageRepository = new ImageRepository();
 
 
 
@@ -77,7 +78,7 @@ $books = $bookRepository->getAllBooks(); // On récupère tous les livre
     <h1 class="text-4xl font-bold text-center text-primary-red py-8">
             Bienvenue <?= htmlspecialchars($user->getPrenom()) ?>
         </h1>
-        <div class="flex justify-between text-neutral-white mx-auto px-8 text-xl pt-2">
+        <div class="flex justify-between space-x-1 text-neutral-white mx-auto px-8 text-xl pt-2">
             <p>Roman</p>
             <p>Thriller</p>
             <p>Histoire</p>
@@ -146,11 +147,13 @@ $books = $bookRepository->getAllBooks(); // On récupère tous les livre
     
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         <?php if (!empty($books)): ?>
-            <?php foreach ($books as $book): ?>
-                <div class="bg-neutral-dark rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                    <img src="<?= $book->getIdImage() ? "path/to/images/{$book->getIdImage()}.jpg" : "path/to/default-image.jpg" ?>" 
-                         alt="photo de la couverture du livre" class="w-full h-64 object-cover">
+            <?php foreach ($books as $book):
+               
 
+                $imagePath = $imageRepository->getImageById($book->getIdImage()); ?>
+                <div class="bg-neutral-dark rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <img src="<?= htmlspecialchars($imagePath->getImagePath()) ?>" alt="Image du livre" class="rounded-lg max-w-full">
+                       
                     <div class="p-4">
                         <p class="text-xl font-semibold text-neutral-white"><?= htmlspecialchars($book->getTitre()) ?></p>
                         <p class="text-lg text-neutral-light"><?= htmlspecialchars($book->getAuteur()) ?></p>
